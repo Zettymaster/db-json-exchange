@@ -20,8 +20,12 @@ pub struct DefinitionFile{
 /// Note that in [Transaction] the name is referenced via a [DatabaseReference]
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Database{
-    /// the unique identifier of the database.
-    /// a database is later referenced by this name using a [DatabaseReference] in [Transaction]
+    /// The unique identifier of the database.
+    /// A database is later referenced by this name using a [DatabaseReference] in [Transaction].
+    /// A database name may only contain:
+    ///  - the letters a-z and A-Z
+    ///  - the numbers 0-9
+    ///  - the symbols '_', '-', '.'
     pub name: String,
     /// the tables that are expected to exist
     pub tables: Vec<Table>
@@ -35,6 +39,10 @@ pub struct Database{
 pub struct Table{
     /// the unique identifier of the table.
     /// Unique in its Database (2 databases may have tables with equal names)
+    /// A table name may only contain:
+    //   - the letters a-z and A-Z
+    //   - the numbers 0-9
+    //   - the symbols '_', '-', '.'
     pub name: String,
     /// the columns in arbitrary order (see note)
     pub columns: Vec<Column>
@@ -45,7 +53,12 @@ pub struct Table{
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Column{
     /// the unique identifier of the column.
-    /// You can have 2 Id columns as long as they are in different tables
+    /// You can have 2 Id columns as long as they are in different tables.
+    ///
+    /// A table name may only contain:
+    ///  - the letters a-z and A-Z
+    ///  - the numbers 0-9
+    ///  - the symbols '_', '-', '.'
     pub name: String,
     /// the type of the column
     #[serde(rename = "type", flatten)]
@@ -86,6 +99,7 @@ pub enum DataType{
     ///
     /// Do note that while everything in this format is encoded in UTF-8 No BOM,
     /// you may need to convert a string your native encoding.
+    /// Care should be taken to properly escape Strings as they run the risk of SQL injection.
     String{ min_chars: usize, max_chars: usize }
 }
 
